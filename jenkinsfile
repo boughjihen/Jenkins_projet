@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Setup Environment') {
+            steps {
+                script {
+                    sh '''
+                    # Vérifier si Python 3 est installé
+                    command -v python3 > /dev/null || { echo "Python3 n'est pas installé !"; exit 1; }
+
+                    # Créer un environnement virtuel Python
+                    python3 -m venv myenv
+                    source myenv/bin/activate
+
+                    # Mettre à jour pip
+                    pip install --upgrade pip
+
+                    # Installer les dépendances
+                    if [ -f requirements.txt ]; then
+                        pip install -r requirements.txt
+                    fi
+                    '''
+                }
+            }
+        }
+
+        stage('Test Application') {
+            steps {
+                script {
+                    sh '''
+                    # Activer l'environnement virtuel
+                    source myenv/bin/activate
+
+                    # Lancer le fichier app.py
+                    python app.py
+                    '''
+                }
+            }
+        }
+    }
+}
+
