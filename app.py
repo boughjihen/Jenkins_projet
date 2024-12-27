@@ -1,7 +1,11 @@
 from flask import Flask, jsonify, request
 
+
 app = Flask(__name__)
 
+@app.route("/")
+def home():
+    return "Bienvenue sur la page d'accueil !"
 # Simuler une base de données
 users = [
     {"id": 1, "name": "John Doe", "age": 30},
